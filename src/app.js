@@ -74,6 +74,55 @@ function testConnection() {
     })
 }
 
+function deleteAllTasks() {
+    // Show confirmation dialog
+    if (confirm("Are you sure you want to delete ALL tasks? This action cannot be undone.")) {
+        // First, get all tasks from the server
+        $.ajax({
+            type: "get",
+            url: "http://fsdiapi.azurewebsites.net/api/tasks",
+            success: function (response) {
+                let data = JSON.parse(response);
+                let deletePromises = [];
+                
+                // Find all tasks with your name and delete them
+                for (let i = 0; i < data.length; i++) {
+                    let task = data[i];
+                    if(task.name == "Ryan58"){
+                        // Create a delete request for each task
+                        let deletePromise = $.ajax({
+                            type: "delete",
+                            url: "http://fsdiapi.azurewebsites.net/api/tasks/" + task._id,
+                            success: function(response) {
+                                console.log("Task deleted:", task._id);
+                            },
+                            error: function(error) {
+                                console.log("Error deleting task:", task._id, error);
+                            }
+                        });
+                        deletePromises.push(deletePromise);
+                    }
+                }
+                
+                // Wait for all delete operations to complete
+                Promise.all(deletePromises).then(function() {
+                    console.log("All tasks deleted from server");
+                    // Clear the display after server deletion
+                    $(".get-list").empty();
+                }).catch(function(error) {
+                    console.log("Some tasks failed to delete:", error);
+                    // Still clear display even if some deletions failed
+                    $(".get-list").empty();
+                });
+            },
+            error: function(error) {
+                console.log("Error fetching tasks for deletion:", error);
+                alert("Error connecting to server. Could not delete tasks.");
+            }
+        });
+    }
+}
+
 function init() {
     console.log("App initialized");
     //load data
@@ -81,6 +130,7 @@ function init() {
 
     //hook events
     $("#btnSave").click(saveTask);
+    $("#btnDeleteAll").click(deleteAllTasks);
 }
 
 window.onload = init;

@@ -66,6 +66,37 @@ main {
     border-radius: 2px;
 }
 
+/* Task controls */
+.task-controls {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e53e3e, #c53030);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(229, 62, 62, 0.2);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c53030, #9c2626);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+}
+
+.btn-danger i {
+    margin-right: 0.5rem;
+}
+
 /* Task items */
 .task-item {
     background: white;
